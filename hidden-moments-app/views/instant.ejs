@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= instant.title %> - Hidden Moments</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
+    nav a { margin-right: 1rem; }
+    audio, video, img { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <h1><%= instant.title %></h1>
+  <nav>
+    <a href="/wall">Back to Wall</a>
+    <a href="/profile/<%= user.username %>">My Profile</a>
+    <a href="/wallet">Wallet</a>
+    <a href="/logout">Logout</a>
+  </nav>
+  <p>Creator: <%= findUserById(instant.creatorId).username %></p>
+  <p>Price: <%= instant.price %> credits</p>
+  <% let minsLeft = Math.max(0, Math.floor((instant.expiresAt - Date.now())/60000)); %>
+  <p>Expires in: <%= instant.isExpired ? 'expired' : (minsLeft + ' min') %></p>
+  <p>Exclusive: <%= instant.isExclusive ? 'Yes' : 'No' %></p>
+  <p>Buyers: <%= instant.buyers.length %></p>
+
+  <% if (canViewMedia) { %>
+    <% const fileExt = instant.filename.split('.').pop().toLowerCase(); %>
+    <% if (['jpg','jpeg','png','gif','webp'].includes(fileExt)) { %>
+      <img src="/uploads/<%= instant.filename %>" alt="instant image">
+    <% } else if (['mp4','webm','ogg'].includes(fileExt)) { %>
+      <video controls src="/uploads/<%= instant.filename %>"></video>
+    <% } else if (['mp3','wav','ogg','m4a'].includes(fileExt)) { %>
+      <audio controls src="/uploads/<%= instant.filename %>"></audio>
+    <% } else { %>
+      <p>Cannot display this file type.</p>
+    <% } %>
+  <% } else { %>
+    <p style="color: gray;">The content of this instant is hidden. Buy it before it expires to see it.</p>
+    <% if (instant.creatorId !== user.id && !instant.buyers.includes(user.id) && (!instant.isExclusive || instant.buyers.length === 0) && !instant.isExpired) { %>
+      <form action="/buy/<%= instant.id %>" method="post">
+        <button type="submit">Buy Now ( <%= instant.price %> credits )</button>
+      </form>
+    <% } else if (instant.creatorId === user.id) { %>
+      <p>This is your own instant.</p>
+    <% } else if (instant.isExclusive && instant.buyers.length > 0) { %>
+      <p>This exclusive instant has already been purchased.</p>
+    <% } else if (instant.buyers.includes(user.id)) { %>
+      <p>You already bought this instant.</p>
+    <% } %>
+  <% } %>
+</body>
+</html>

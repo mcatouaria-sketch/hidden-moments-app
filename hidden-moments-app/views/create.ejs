@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Instant - Hidden Moments</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
+    label { display: block; margin-bottom: 0.5rem; }
+    input[type="text"] { width: 100%; padding: 0.5rem; }
+    input[type="file"] { margin-top: 0.5rem; }
+    button { padding: 0.5rem 1rem; margin-top: 1rem; }
+    .error { color: red; }
+    nav a { margin-right: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Create a New Instant</h1>
+  <nav>
+    <a href="/wall">Back to Wall</a>
+    <a href="/profile/<%= user.username %>">My Profile</a>
+    <a href="/wallet">Wallet</a>
+    <a href="/logout">Logout</a>
+  </nav>
+  <% if (error) { %><p class="error"><%= error %></p><% } %>
+  <form action="/create" method="post" enctype="multipart/form-data">
+    <label>Title:
+      <input type="text" name="title" required maxlength="60">
+    </label>
+    <label>Content (photo, video or audio):
+      <input type="file" name="content" accept="image/*,video/*,audio/*" required>
+    </label>
+    <label>
+      <input type="checkbox" name="exclusive"> Exclusive (only one buyer)
+    </label>
+    <button type="submit">Create Instant</button>
+  </form>
+</body>
+</html>

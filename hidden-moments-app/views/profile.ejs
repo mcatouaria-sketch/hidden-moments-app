@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= profileUser.username %> - Profile - Hidden Moments</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; }
+    nav a { margin-right: 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>Profile: <%= profileUser.username %></h1>
+  <nav>
+    <a href="/wall">Wall</a>
+    <a href="/create">Create Instant</a>
+    <a href="/wallet">Wallet</a>
+    <a href="/logout">Logout</a>
+  </nav>
+  <% if (user.id === profileUser.id) { %>
+    <p>Your credits: <%= profileUser.credits %></p>
+  <% } %>
+  <h2>Instants created by <%= profileUser.username %></h2>
+  <% if (createdInstants.length === 0) { %>
+    <p>No instants created yet.</p>
+  <% } else { %>
+    <ul>
+      <% createdInstants.forEach(function(inst) { %>
+        <li>
+          <a href="/instant/<%= inst.id %>"><%= inst.title %></a>
+          (expires <%= inst.isExpired ? 'expired' : 'in ' + Math.max(0, Math.floor((inst.expiresAt - Date.now())/60000)) + ' min' %>)
+        </li>
+      <% }); %>
+    </ul>
+  <% } %>
+  <h2>Top Fans</h2>
+  <% if (topFans.length === 0) { %>
+    <p>No fans yet.</p>
+  <% } else { %>
+    <table>
+      <thead><tr><th>Fan</th><th>Credits Spent</th></tr></thead>
+      <tbody>
+        <% topFans.forEach(function(fr) { %>
+          <tr>
+            <td><%= fr.fanUsername %></td>
+            <td><%= fr.credits %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } %>
+</body>
+</html>

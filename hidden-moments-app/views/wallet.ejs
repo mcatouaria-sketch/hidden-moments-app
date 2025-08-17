@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wallet - Hidden Moments</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
+    nav a { margin-right: 1rem; }
+    button { padding: 0.5rem 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Your Wallet</h1>
+  <nav>
+    <a href="/wall">Wall</a>
+    <a href="/create">Create Instant</a>
+    <a href="/profile/<%= user.username %>">My Profile</a>
+    <a href="/logout">Logout</a>
+  </nav>
+  <p>Current credits: <strong><%= user.credits %></strong></p>
+  <h2>Get Free Credits</h2>
+  <form action="/checkin" method="post">
+    <button type="submit">Daily Check-in (+3 credits)</button>
+  </form>
+  <p>Come back once per day to earn free credits.</p>
+  <h2>Buy Credits</h2>
+  <p>The buy credits functionality is not implemented in this demo.</p>
+  <p>In a real app, you could integrate Stripe or in-app purchases here.</p>
+</body>
+</html>

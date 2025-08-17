@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - Hidden Moments</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
+    label { display: block; margin-bottom: 0.5rem; }
+    input { padding: 0.5rem; width: 100%; }
+    button { padding: 0.5rem 1rem; margin-top: 1rem; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Register</h1>
+  <% if (error) { %><p class="error"><%= error %></p><% } %>
+  <form action="/register" method="post">
+    <label>Username:
+      <input type="text" name="username" required>
+    </label>
+    <label>Password:
+      <input type="password" name="password" required>
+    </label>
+    <button type="submit">Register</button>
+  </form>
+  <p>Already have an account? <a href="/login">Login here</a>.</p>
+</body>
+</html>

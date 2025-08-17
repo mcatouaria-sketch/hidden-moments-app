@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wall - Hidden Moments</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; }
+    nav a { margin-right: 1rem; }
+    ul { list-style: none; padding: 0; }
+    li { margin-bottom: 1rem; }
+    form { display: inline; }
+  </style>
+</head>
+<body>
+  <h1>Hidden Moments</h1>
+  <p>Welcome, <%= user.username %> (Credits: <%= user.credits %>)</p>
+  <nav>
+    <a href="/create">Create Instant</a>
+    <a href="/profile/<%= user.username %>">My Profile</a>
+    <a href="/wallet">Wallet</a>
+    <a href="/logout">Logout</a>
+  </nav>
+  <h2>Available Instants</h2>
+  <% if (instants.length === 0) { %>
+    <p>No instants available right now. Be the first to create one!</p>
+  <% } %>
+  <ul>
+  <% instants.forEach(function(inst) { %>
+    <li>
+      <strong><a href="/instant/<%= inst.id %>"><%= inst.title %></a></strong>
+      (by <%= findUserById(inst.creatorId).username %>) | Expires in 
+      <% let minutesLeft = Math.max(0, Math.floor((inst.expiresAt - Date.now()) / 60000)); %>
+      <%= minutesLeft %> min
+      | Price: <%= inst.price %> credits
+      | Buyers: <%= inst.buyers.length %>
+      <% if (inst.creatorId !== user.id && !inst.buyers.includes(user.id) && (!inst.isExclusive || inst.buyers.length === 0)) { %>
+        <form action="/buy/<%= inst.id %>" method="post">
+          <button type="submit">Buy</button>
+        </form>
+      <% } else if (inst.creatorId === user.id) { %>
+        (your instant)
+      <% } else if (inst.isExclusive && inst.buyers.length > 0) { %>
+        (sold)
+      <% } else { %>
+        (already bought)
+      <% } %>
+    </li>
+  <% }); %>
+  </ul>
+</body>
+</html>
